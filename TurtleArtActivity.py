@@ -29,9 +29,9 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
+from gi.repository import GLib
 import logging
 _logger = logging.getLogger('turtleart-activity')
 
@@ -262,7 +262,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_as_logo)
+        GLib.timeout_add(250, self.__save_as_logo)
 
     def __save_as_logo(self):
         logo_code_path = self._dump_logo_code()
@@ -287,7 +287,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_as_python)
+        GLib.timeout_add(250, self.__save_as_python)
 
     def __save_as_python(self):
         # catch PyExportError and display a user-friendly message instead
@@ -378,7 +378,7 @@ class TurtleArtActivity(activity.Activity):
         ''' Load Python code from the Journal. '''
         self.load_python.set_icon_name('pippy-openon')
         self.tw.load_python_code_from_file(fname=None, add_new_block=True)
-        GObject.timeout_add(
+        GLib.timeout_add(
             250, self.load_python.set_icon_name, 'pippy-openoff')
 
     def do_save_as_odp_cb(self, button):
@@ -387,7 +387,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_as_odp)
+        GLib.timeout_add(250, self.__save_as_odp)
 
     def __save_as_odp(self):
         self.tw.save_as_odp()
@@ -400,7 +400,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_as_icon)
+        GLib.timeout_add(250, self.__save_as_icon)
 
     def __save_as_icon(self):
         self.tw.write_svg_operation()
@@ -416,7 +416,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_as_image)
+        GLib.timeout_add(250, self.__save_as_image)
 
     def __save_as_image(self):
         self.tw.save_as_image()
@@ -431,7 +431,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__save_blocks_as_image)
+        GLib.timeout_add(250, self.__save_blocks_as_image)
 
     def __save_blocks_as_image(self):
         self.tw.save_blocks_as_image()
@@ -444,7 +444,7 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
                 self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        GObject.timeout_add(250, self.__keep)
+        GLib.timeout_add(250, self.__keep)
 
     def __keep(self):
         tmpfile = self._dump_ta_code()
@@ -535,7 +535,7 @@ class TurtleArtActivity(activity.Activity):
         self.recenter()
         self.tw.eraser_button()
         self.restore_state()
-        GObject.timeout_add(250, self.eraser_button.set_icon_name, 'eraseron')
+        GLib.timeout_add(250, self.eraser_button.set_icon_name, 'eraseron')
  
     def restore_state(self):
         ''' Restore the current challange after a clear screen '''
@@ -1356,7 +1356,7 @@ class TurtleArtActivity(activity.Activity):
         self.hadj_value = self.sw.get_hadjustment().get_value()
         self.vadj_value = self.sw.get_vadjustment().get_value()
         if not self._defer_palette_move:
-            GObject.idle_add(self.adjust_palette)
+            GLib.idle_add(self.adjust_palette)
 
     def _setup_canvas(self, canvas_window):
         ''' Initialize the turtle art canvas. '''
@@ -1540,7 +1540,7 @@ class TurtleArtActivity(activity.Activity):
                     if not plugin:
                         turtle_code = os.path.join(tmp_dir, 'ta_code.ta')
                         if os.path.exists(turtle_code):
-                            GObject.idle_add(self._project_loader, turtle_code)
+                            GLib.idle_add(self._project_loader, turtle_code)
                     else:
                         _logger.debug('load a plugin from %s' % (tmp_dir))
                         load_a_plugin(self, tmp_dir)
@@ -1559,7 +1559,7 @@ class TurtleArtActivity(activity.Activity):
 
             # ...otherwise, assume it is a .ta file.
             else:
-                GObject.idle_add(self._project_loader, file_path)
+                GLib.idle_add(self._project_loader, file_path)
 
         else:
             _logger.debug('Deferring reading file %s' % (file_path))
